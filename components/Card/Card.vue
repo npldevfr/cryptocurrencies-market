@@ -50,6 +50,16 @@ export default defineComponent({
       })
       this.marketCap = Object.values(cs)
     })
+
+    setInterval(() => {
+      fetch(`https://api.coingecko.com/api/v3/coins/${this.coin.id}/market_chart?vs_currency=eur&days=1`)
+          .then(r => r.json()).then((coins) => {
+        const cs = coins.prices.map((coin) => {
+          return [coin[0], coin[1]]
+        })
+        this.marketCap = Object.values(cs)
+      })
+    }, 10000)
   },
   computed: {
     getColor() {
