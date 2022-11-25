@@ -1,14 +1,15 @@
 <template>
-  <div class="ModalItem" @mouseover="isMouseOver = true" @mouseleave="isMouseOver = false">
+  <div class="ModalItem" :class="{'ModalItemDanger': isCoinInList}" @mouseover="isMouseOver = true"
+       @mouseleave="isMouseOver = false">
     <div class="ModalItemTitle">
       <img :src="coin.image" width="20" :alt="coin.name"/>
       {{ coin.name }}
       <span class="ModalItemSymbol">{{ coin.symbol }}</span>
     </div>
     <div>
-      <Transition name="bounce">
+      <Transition>
         <div v-if="isMouseOver">
-          <div class="ModalItemAction">
+          <div class="ModalItemAction" :class="{'ModalItemActionDanger': isCoinInList}">
             <Icon name="material-symbols:add-box" @click="addItem(coin.id)" v-if="!isCoinInList"/>
             <Icon name="ic:round-remove-circle" @click="removeItem(coin.id)" v-else/>
           </div>
@@ -95,12 +96,23 @@ export default defineComponent({
     justify-content: center;
     align-items: center;
     gap: 10px;
+
+    &Danger {
+      color: #ab1a1a;
+    }
+
   }
 
   &:hover {
     background: #1E1E1E;
     cursor: pointer;
     border: 1px solid var(--primary);
+  }
+
+  &Danger {
+    &:hover {
+      border: 1px solid #ab1a1a;
+    }
   }
 }
 </style>

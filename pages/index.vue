@@ -103,7 +103,7 @@ export default defineComponent({
       return this.getNonShowedCount > 0;
     },
     getHeadCoins(){
-      return this.getSelectedCoins(['bnb', 'btc', 'eth', 'doge'])
+      return this.getSelectedCoins(['bnb', 'btc', 'eth', 'doge', 'usdt', 'xrp', 'ada'])
     }
   },
   mounted() {
