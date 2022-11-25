@@ -1,13 +1,57 @@
 <template>
-  <div class="Home">
-    <input type="text" v-model="search" placeholder="Search for a coin"/>
-    <div v-for="coin in getLimitedCoinsSearch" :key="coin.id">
-      {{ coin.name }}
+  <DefaultLayout>
+
+    <Cards>
+      <Card v-for="coin in getHeadCoins" :key="coin.id" :coin="coin"/>
+      <EmptyCard @open-modal="modalState = true" />
+    </Cards>
+
+    <div class="Home">
+      <Modal @close="modalState = false"
+             :show="modalState"
+             title="Ajouter une crypto à votre wallet">
+        <template v-slot:header>
+          <Input autofocus ref="input" v-model:model-value="searchCryptoValue"
+                 placeholder="Chercher par nom, référence"/>
+        </template>
+
+        <template v-slot:body>
+
+          <template v-if="getFilteredCoinsBySearch.length > 0">
+            <ModalActions padding>
+              <template v-slot:left>
+                <ModalText :label="`${getLimitedCoinsSearch.length} résultats`"/>
+              </template>
+              <template v-slot:right>
+                <ModalLink v-if="addLoadMore" @click="limitResults += 10"
+                           :label="`Charger plus de résultats (${getNonShowedCount})`"/>
+              </template>
+            </ModalActions>
+
+            <ModalItemGroup>
+              <ModalItem v-for="coin in getLimitedCoinsSearch" :key="coin.id" :coin="coin"/>
+            </ModalItemGroup>
+          </template>
+          <template v-else>
+            <ModalNoResult :search-query="searchCryptoValue" v-if="!!searchCryptoValue"/>
+          </template>
+        </template>
+
+        <template v-slot:footer>
+          <ModalActions>
+            <template v-slot:left>
+              <KbdGroup @click="modalState = false">
+                <Kbd label="ESC"/>
+                Quitter
+              </KbdGroup>
+            </template>
+          </ModalActions>
+        </template>
+      </Modal>
+
+
     </div>
-    <div v-if="addLoadMore">
-      <button @click="limitResults += 10">Charger plus  ({{ getNonShowedCount }})</button>
-    </div>
-  </div>
+  </DefaultLayout>
 </template>
 
 <script lang="ts">
@@ -15,23 +59,36 @@
 
 import {mapState} from "pinia";
 import {useCoinsStore} from "~/stores/coinsStore";
+import Modal from "~/components/Modal/Modal.vue";
+import {defineComponent} from "vue";
+import DefaultLayout from "~/layouts/default.vue";
+import Cards from "~/components/Card/Cards.vue";
+import EmptyCard from "~/components/Card/EmptyCard.vue";
 
-export default {
+
+export default defineComponent({
   name: "Home",
+  components: {EmptyCard, Cards, DefaultLayout, Modal},
   data() {
     return {
-      search: '',
+      /* Modal */
+      modalState: false,
+
+      /* inputValues */
+      searchCryptoValue: '',
+
+
       limitResults: 10,
     }
   },
   computed: {
-    ...mapState(useCoinsStore, ["getCoins"]),
+    ...mapState(useCoinsStore, ["getCoins", "getSelectedCoins"]),
     getFilteredCoinsBySearch() {
       return this.getCoins.filter(coin => {
-        if (this.search.length > 3) {
-          return coin.name.toLowerCase().includes(this.search.toLowerCase()) || coin.symbol.toLowerCase().includes(this.search.toLowerCase()) || coin.id.toLowerCase().includes(this.search.toLowerCase())
+        if (this.searchCryptoValue.length > 3) {
+          return coin.name.toLowerCase().includes(this.searchCryptoValue.toLowerCase()) || coin.symbol.toLowerCase().includes(this.searchCryptoValue.toLowerCase()) || coin.id.toLowerCase().includes(this.searchCryptoValue.toLowerCase())
         } else {
-          return coin.name.toLowerCase().includes(this.search.toLowerCase()) || coin.symbol.toLowerCase().includes(this.search.toLowerCase())
+          return coin.name.toLowerCase().includes(this.searchCryptoValue.toLowerCase()) || coin.symbol.toLowerCase().includes(this.searchCryptoValue.toLowerCase())
         }
       })
 
@@ -44,9 +101,27 @@ export default {
     },
     addLoadMore() {
       return this.getNonShowedCount > 0;
+    },
+    getHeadCoins(){
+      return this.getSelectedCoins(['bnb', 'btc', 'eth', 'doge'])
     }
   },
-}
+  mounted() {
+    // if ctrl + k is pressed, focus on the input
+    document.addEventListener('keydown', (e) => this.handleKeyCtrlK(e));
+  },
+  beforeUnmount() {
+    document.removeEventListener('keydown', (e) => this.handleKeyCtrlK(e));
+  },
+  methods: {
+    handleKeyCtrlK(event: KeyboardEvent) {
+      if (event.ctrlKey && event.key === 'k') {
+        event.preventDefault();
+        this.modalState = !this.modalState;
+      }
+    },
+  }
+})
 </script>
 
 <style lang="scss" scoped>
