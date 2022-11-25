@@ -59,7 +59,7 @@ export default defineComponent({
         })
         this.marketCap = Object.values(cs)
       })
-    }, 10000)
+    }, 25000)
   },
   computed: {
     getColor() {

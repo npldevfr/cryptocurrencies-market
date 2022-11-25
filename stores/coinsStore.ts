@@ -25,7 +25,7 @@ export const useCoinsStore = defineStore('coins-store', {
                     .then(r => r.json()).then((coins: Coin[]) => {
                     this.SET_COINS(coins);
                 });
-            }, 10000);
+            }, 25000);
 
         }
     }
