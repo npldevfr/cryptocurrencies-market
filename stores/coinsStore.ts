@@ -9,9 +9,15 @@ export const useCoinsStore = defineStore('coins-store', {
         getCoins: (state) => state.coins,
         getSelectedCoins: (state) => (coinsSymbols: string[]) => {
             return state.coins.filter(coin => coinsSymbols.includes(coin.symbol))
+        },
+        getHeadCoinsStorage: (state) => (coinsSymbols: string[]) => {
+            return state.coins.filter(coin => coinsSymbols.includes(coin.symbol)).slice(0, 10)
         }
     },
     actions: {
+        REFRESH_COINS(coins: Coin[]) {
+            this.coins = coins;
+        },
         SET_COINS(coins: Coin[]) {
             this.coins = coins;
         },

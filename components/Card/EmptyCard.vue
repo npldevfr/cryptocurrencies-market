@@ -1,8 +1,8 @@
 <template>
   <div class="EmptyCard">
-    Aucun favoris
     <div class="EmptyCardAdd" @click="$emit('openModal')">
       <Icon name="material-symbols:add" />
+      Ajouter un favori
     </div>
   </div>
 </template>
@@ -39,11 +39,12 @@ export default defineComponent({
 
     transition: all 0.2s ease-in-out;
     display: flex;
+    gap: 10px;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
     background: #292929;
-    padding: 10px;
+    padding: 10px 20px;
     color: #D2D3E0;
     font-size: 16px;
     font-weight: 500;

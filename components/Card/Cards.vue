@@ -23,4 +23,10 @@ export default defineComponent({
   gap: 10px;
 
 }
+
+@media screen and (max-width: 1200px) {
+  .Cards {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
 </style>

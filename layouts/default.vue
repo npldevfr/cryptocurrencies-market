@@ -34,4 +34,11 @@ export default defineComponent({
     align-items: flex-start;
   }
 }
+
+@media screen and (max-width: 1200px) {
+  .DefaultLayoutContainer {
+    width: 100%;
+    padding: 0 20px;
+  }
+}
 </style>

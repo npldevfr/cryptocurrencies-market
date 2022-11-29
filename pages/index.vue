@@ -1,10 +1,19 @@
 <template>
   <DefaultLayout>
 
-    <Cards>
-      <Card v-for="coin in getHeadCoins" :key="coin.id" :coin="coin"/>
-      <EmptyCard @open-modal="modalState = true" />
-    </Cards>
+    <SectionGroup>
+      <SectionHeader title="Vos favoris"/>
+      <Cards>
+        <Card v-for="coin in getHeadCoinsStorage()" :key="coin.id" :coin="coin"/>
+        <EmptyCard @open-modal="modalState = true"/>
+      </Cards>
+    </SectionGroup>
+
+
+    <SectionGroup>
+      <SectionHeader title="Toutes les cryptomonnaies"/>
+    </SectionGroup>
+
 
     <div class="Home">
       <Modal @close="modalState = false"
@@ -64,6 +73,7 @@ import {defineComponent} from "vue";
 import DefaultLayout from "~/layouts/default.vue";
 import Cards from "~/components/Card/Cards.vue";
 import EmptyCard from "~/components/Card/EmptyCard.vue";
+import {useStorage} from "@vueuse/core";
 
 
 export default defineComponent({
@@ -79,6 +89,20 @@ export default defineComponent({
 
 
       limitResults: 10,
+    }
+  },
+  setup() {
+    const storage = useStorage('coins', [])
+    const coinsStore = useCoinsStore()
+
+    //when storage.value change, update getHeadCoinsStorage
+
+    const getHeadCoinsStorage = () => {
+      return coinsStore.getHeadCoinsStorage(storage.value)
+    }
+
+    return {
+      getHeadCoinsStorage
     }
   },
   computed: {
@@ -101,9 +125,6 @@ export default defineComponent({
     },
     addLoadMore() {
       return this.getNonShowedCount > 0;
-    },
-    getHeadCoins(){
-      return this.getSelectedCoins(['bnb', 'btc', 'eth', 'doge', 'usdt', 'xrp', 'ada'])
     }
   },
   mounted() {

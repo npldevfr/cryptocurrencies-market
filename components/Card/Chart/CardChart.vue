@@ -1,6 +1,6 @@
 <template>
   <div class="CardChart" v-if="marketCap">
-    <apexchart :options="chartOptions" :series="series"/>
+    <apexchart height="100%" :options="chartOptions" :series="series"/>
   </div>
 </template>
 
@@ -77,6 +77,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .CardChart {
-
+  margin-top: -5px;
 }
 </style>

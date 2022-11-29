@@ -72,14 +72,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 .Card {
   background: #1E1E1E;
-  border-bottom: 1px solid #292929;
   width: 100%;
   border-radius: 4px;
-  padding: 15px;
+  overflow: hidden;
   height: 180px;
 
   &Header {
     display: flex;
+    padding: 15px 10px 0;
     justify-content: space-between;
   }
 

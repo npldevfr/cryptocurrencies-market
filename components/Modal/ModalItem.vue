@@ -10,8 +10,8 @@
       <Transition>
         <div v-if="isMouseOver">
           <div class="ModalItemAction" :class="{'ModalItemActionDanger': isCoinInList}">
-            <Icon name="material-symbols:add-box" @click="addItem(coin.id)" v-if="!isCoinInList"/>
-            <Icon name="ic:round-remove-circle" @click="removeItem(coin.id)" v-else/>
+            <Icon name="material-symbols:add-box" @click="addCoin(coin.symbol)" v-if="!isCoinInList"/>
+            <Icon name="ic:round-remove-circle" @click="removeCoin(coin.symbol)" v-else/>
           </div>
         </div>
       </Transition>
@@ -22,7 +22,7 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {Coin} from "~/types/Coin";
-import useCoinsList from "~/composables/useCoinsList";
+import { useStorage } from '@vueuse/core'
 
 export default defineComponent({
   name: "ModalItem",
@@ -39,15 +39,33 @@ export default defineComponent({
   },
   computed: {
     isCoinInList() {
-      return useCoinsList().isCoinInList(this.coin.id);
+      return this.coinsList().includes(this.coin.symbol);
     }
   },
-  methods: {
-    addItem(id: string) {
-      useCoinsList().addLocalCoin(id);
-    },
-    removeItem(id: string) {
-      useCoinsList().removeLocalCoin(id);
+  setup() {
+    const storage = useStorage('coins', [])
+
+    const addCoin = (id: string) => {
+      const coins = storage.value
+      coins.push(id)
+      storage.value = coins
+    }
+
+    const removeCoin = (id: string) => {
+      const coins = storage.value
+      const index = coins.indexOf(id)
+      coins.splice(index, 1)
+      storage.value = coins
+    }
+
+    const coinsList = () => {
+      return storage.value
+    }
+
+    return {
+      addCoin,
+      removeCoin,
+      coinsList
     }
   }
 })
@@ -111,6 +129,7 @@ export default defineComponent({
 
   &Danger {
     &:hover {
+      background: rgba(185, 35, 35, 0.16);
       border: 1px solid #ab1a1a;
     }
   }
