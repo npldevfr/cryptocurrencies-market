@@ -16,6 +16,7 @@
     "@vueuse/components": "^9.6.0",
     "apexcharts": "^3.36.3",
     "sass": "^1.56.1",
-    "vue3-apexcharts": "^1.4.1"
+    "vue3-apexcharts": "^1.4.1",
+    "vue3-marquee": "^3.1.2"
   }
 }

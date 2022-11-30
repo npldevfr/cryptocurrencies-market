@@ -4,6 +4,7 @@ export default defineNuxtConfig({
         '@pinia/nuxt',
         'nuxt-icon'
     ],
+
     css: [
         '~/assets/scss/reset.scss',
         '~/assets/scss/global.scss',

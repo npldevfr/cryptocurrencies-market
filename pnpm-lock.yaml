@@ -8,6 +8,7 @@ specifiers:
   nuxt-icon: ^0.1.7
   sass: ^1.56.1
   vue3-apexcharts: ^1.4.1
+  vue3-marquee: ^3.1.2
 
 dependencies:
   '@pinia/nuxt': 0.4.5
@@ -15,6 +16,7 @@ dependencies:
   apexcharts: 3.36.3
   sass: 1.56.1
   vue3-apexcharts: 1.4.1_apexcharts@3.36.3
+  vue3-marquee: 3.1.2
 
 devDependencies:
   nuxt: 3.0.0_sass@1.56.1
@@ -4523,6 +4525,13 @@ packages:
       vue: '> 3.0.0'
     dependencies:
       apexcharts: 3.36.3
+    dev: false
+
+  /vue3-marquee/3.1.2:
+    resolution: {integrity: sha512-qorZUAakbQqxHmgFBpunQ4WNcdgclG8XRTWjA9Rg+LSLIBWUFYL8LP7Ozf/CQPiZrFxP3PK2GtfN1uCDA/FoiA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      vue: ^3.2
     dev: false
 
   /wcwidth/1.0.1:

@@ -10,6 +10,9 @@
       <Transition>
         <div v-if="isMouseOver">
           <div class="ModalItemAction" :class="{'ModalItemActionDanger': isCoinInList}">
+            <div class="AddButton">
+
+            </div>
             <Icon name="material-symbols:add-box" @click="addCoin(coin.symbol)" v-if="!isCoinInList"/>
             <Icon name="ic:round-remove-circle" @click="removeCoin(coin.symbol)" v-else/>
           </div>
@@ -23,6 +26,7 @@
 import {defineComponent} from "vue";
 import {Coin} from "~/types/Coin";
 import { useStorage } from '@vueuse/core'
+import {useLocalCoinsStore} from "~/stores/localCoinsStore";
 
 export default defineComponent({
   name: "ModalItem",
@@ -39,33 +43,16 @@ export default defineComponent({
   },
   computed: {
     isCoinInList() {
-      return this.coinsList().includes(this.coin.symbol);
+      return this.coinsList.includes(this.coin.symbol)
     }
   },
   setup() {
-    const storage = useStorage('coins', [])
-
-    const addCoin = (id: string) => {
-      const coins = storage.value
-      coins.push(id)
-      storage.value = coins
-    }
-
-    const removeCoin = (id: string) => {
-      const coins = storage.value
-      const index = coins.indexOf(id)
-      coins.splice(index, 1)
-      storage.value = coins
-    }
-
-    const coinsList = () => {
-      return storage.value
-    }
+    const localCoins = useLocalCoinsStore()
 
     return {
-      addCoin,
-      removeCoin,
-      coinsList
+      coinsList: localCoins.getCoins,
+      addCoin: localCoins.ADD_COIN,
+      removeCoin: localCoins.REMOVE_COIN,
     }
   }
 })
